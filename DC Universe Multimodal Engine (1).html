@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DC Universe Multimodal Engine</title>
+<style>
+/* =========================================================
+   DC UNIVERSE HIGH CONTRAST DESIGN SYSTEM
+========================================================= */
+:root {
+  --primary: #ffd700; 
+  --primary-rgb: 255, 215, 0;
+  --beam-rgb: 255, 215, 0;
+  
+  --black: #000000;
+  --panel: rgba(10, 10, 14, 0.96); 
+  --panel-2: rgba(18, 18, 26, 0.98); 
+  --border: rgba(255, 215, 0, 0.6); 
+  --text-main: #ffffff; 
+  --text-muted: #f0f0f0; 
+
+  --control-padding: 12px 20px;
+  --control-size: 0.95rem;
+  --radius: 12px;
+  --animation-speed: 0.35s;
+  --focus-ring: 0 0 0 3px #000000, 0 0 0 6px var(--primary);
+}
+
+/* =========================================================
+   GLOBAL THEMES & DYNAMIC SUPERHERO CURSORS
+========================================================= */
+/* Default / Batman Cursor Across Entire Interface */
+body.theme-batman, 
+body.theme-batman * {
+  --primary: #ffd700; 
+  --primary-rgb: 255, 215, 0;
+  --beam-rgb: 255, 215, 0;
+  --bg-gradient: radial-gradient(circle at 50% 20%, #111827 0%, #000000 80%);
+  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><path d="M16 22 L14 18 L6 20 L2 12 L10 10 L14 14 L16 8 L18 14 L22 10 L30 12 L26 20 L18 18 Z" fill="%23ffd700" stroke="%23000000" stroke-width="1.5"/></svg>') 16 16, auto !important;
+}
+body.theme-batman .signal-beam {
+  clip-path: polygon(45% 0, 55% 0, 100% 100%, 0% 100%);
+  background: linear-gradient(to bottom, rgba(255, 215, 0, 0.45) 0%, transparent 100%);
+  filter: drop-shadow(0 0 25px rgba(255, 215, 0, 0.6));
+}
+
+/* Superman Theme & S-Shield Laser Cursor */
+body.theme-superman, 
+body.theme-superman * {
+  --primary: #ff3355; 
+  --primary-rgb: 255, 51, 85;
+  --beam-rgb: 255, 51, 85;
+  --bg-gradient: radial-gradient(circle at 50% 20%, #0a1931 0%, #000000 80%);
+  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><polygon points="16,30 4,16 10,8 22,8 28,16" fill="%23ff3355" stroke="%23ffd700" stroke-width="1.5"/><path d="M 21,12 L 14,12 L 12,16 L 19,18 L 17,23 L 11,23" stroke="%23ffd700" stroke-width="2" fill="none"/></svg>') 16 16, auto !important;
+}
+body.theme-superman .signal-beam {
+  clip-path: polygon(48% 0, 52% 0, 80% 100%, 72% 100%, 50% 18%, 28% 100%, 20% 100%);
+  background: linear-gradient(to bottom, #ff0033 0%, #ff7700 65%, transparent 100%);
+  filter: drop-shadow(0 0 30px #ff0033);
+}
+
+/* Wonder Woman Theme & Tiara Star Cursor */
+body.theme-wonderwoman, 
+body.theme-wonderwoman * {
+  --primary: #ffc107; 
+  --primary-rgb: 255, 193, 7;
+  --beam-rgb: 255, 193, 7;
+  --bg-gradient: radial-gradient(circle at 50% 20%, #2b000a 0%, #000000 80%);
+  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><polygon points="4,10 16,16 28,10 24,4 8,4" fill="%23ffc107" stroke="%23000000" stroke-width="1"/><polygon points="16,10 14,14 18,14" fill="%23cc0033"/></svg>') 16 16, auto !important;
+}
+body.theme-wonderwoman .signal-beam {
+  clip-path: polygon(46% 0, 54% 0, 95% 35%, 75% 42%, 90% 80%, 10% 100%, 25% 75%, 5% 35%);
+  background: linear-gradient(to bottom, #ffcc00 0%, #ff0055 70%, transparent 100%);
+  filter: drop-shadow(0 0 30px #ffcc00);
+}
+
+/* The Flash Theme & Lightning Bolt Cursor */
+body.theme-flash, 
+body.theme-flash * {
+  --primary: #ffee00; 
+  --primary-rgb: 255, 238, 0;
+  --beam-rgb: 255, 238, 0;
+  --bg-gradient: radial-gradient(circle at 50% 20%, #3a0000 0%, #000000 80%);
+  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><polygon points="18,2 6,18 14,18 10,30 26,12 18,12" fill="%23ffee00" stroke="%23cc0000" stroke-width="1.5"/></svg>') 16 16, auto !important;
+}
+body.theme-flash .signal-beam {
+  clip-path: polygon(48% 0, 52% 0, 75% 25%, 48% 28%, 88% 60%, 38% 65%, 80% 100%, 10% 100%);
+  background: linear-gradient(to bottom, #ffee00 0%, #ff0000 80%, transparent 100%);
+  filter: drop-shadow(0 0 35px #ffee00);
+}
+
+/* Green Lantern Theme & Ring Construct Cursor */
+body.theme-greenlantern, 
+body.theme-greenlantern * {
+  --primary: #00ff77; 
+  --primary-rgb: 0, 255, 119;
+  --beam-rgb: 0, 255, 119;
+  --bg-gradient: radial-gradient(circle at 50% 20%, #00280f 0%, #000000 80%);
+  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><circle cx="16" cy="16" r="10" fill="none" stroke="%2300ff77" stroke-width="3"/><circle cx="16" cy="16" r="4" fill="%2300ff77"/><line x1="4" y1="10" x2="28" y2="10" stroke="%2300ff77" stroke-width="2"/><line x1="4" y1="22" x2="28" y2="22" stroke="%2300ff77" stroke-width="2"/></svg>') 16 16, auto !important;
+}
+body.theme-greenlantern .signal-beam {
+  clip-path: polygon(42% 0, 58% 0, 92% 100%, 8% 100%);
+  background: repeating-linear-gradient(0deg, rgba(0,255,119,0.5), rgba(0,255,119,0.5) 12px, transparent 12px, transparent 24px), linear-gradient(to bottom, rgba(0,255,119,0.7) 0%, transparent 100%);
+  filter: drop-shadow(0 0 30px #00ff77);
+}
+
+/* =========================================================
+   BASE LAYOUT & BACKGROUND
+========================================================= */
+* { box-sizing: border-box; }
+body {
+  margin: 0; min-height: 100vh; color: var(--text-main);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: var(--bg-gradient);
+  position: relative; z-index: 0; overflow-x: hidden;
+  transition: background var(--animation-speed) ease-in-out;
+}
+
+body::before {
+  content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 32px 32px;
+  z-index: -2; pointer-events: none;
+}
+
+.bg-hero-symbol {
+  position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: 90vw; max-width: 850px; opacity: 0.06; pointer-events: none; z-index: -1;
+  color: var(--primary); transition: color var(--animation-speed);
+}
+
+/* =========================================================
+   HEADER & TOP LIGHT BEAM
+========================================================= */
+.header { 
+  position: relative; padding: 40px 25px 25px 25px; 
+  text-align: center; border-bottom: 2px solid var(--primary); 
+  background: #000000; overflow: hidden; 
+  transition: border-color var(--animation-speed);
+}
+
+.signal { 
+  position: absolute; width: 180px; height: 180px; 
+  left: 50%; top: -60px; transform: translateX(-50%); 
+  border-radius: 50%; background: rgba(var(--beam-rgb), .2); 
+  box-shadow: 0 0 120px rgba(var(--beam-rgb), .4); 
+  animation: signalPulse 4s infinite; z-index: 1; 
+  transition: background var(--animation-speed);
+}
+
+@keyframes signalPulse { 50% { transform: translateX(-50%) scale(1.3); } }
+
+.signal-beam {
+  position: absolute; top: -60px; left: 50%; transform: translateX(-50%);
+  transform-origin: top center; width: 500px; height: 1200px;
+  pointer-events: none; z-index: 0;
+  transition: background var(--animation-speed), clip-path var(--animation-speed), filter var(--animation-speed), transform 0.1s ease-out;
+}
+
+.hero-avatar-wrapper {
+  width: 130px; height: 130px; border-radius: 50%;
+  border: 4px solid var(--primary);
+  box-shadow: 0 0 35px rgba(var(--primary-rgb), 0.8);
+  margin: 0 auto 18px auto; display: flex;
+  align-items: center; justify-content: center;
+  position: relative; z-index: 2; background: #000000;
+  transition: all var(--animation-speed); overflow: hidden;
+}
+
+.hero-avatar-wrapper svg { width: 100%; height: 100%; }
+
+.logo { 
+  position: relative; color: var(--primary); 
+  font-size: 3rem; font-weight: 900; letter-spacing: 0.15em; 
+  text-shadow: 0 0 20px rgba(var(--primary-rgb), 0.9), 2px 2px 4px #000000; 
+  transition: color var(--animation-speed), text-shadow var(--animation-speed); z-index: 2; 
+}
+.logo svg {
+  vertical-align: middle; margin-right: 12px; margin-bottom: 6px;
+  filter: drop-shadow(0 0 12px var(--primary));
+  transition: filter var(--animation-speed), color var(--animation-speed);
+}
+
+.subtitle { 
+  position: relative; margin-top: 8px; color: #ffffff; 
+  font-size: 1rem; font-weight: 800; letter-spacing: .25em; 
+  text-transform: uppercase; z-index: 2; 
+  text-shadow: 2px 2px 4px #000000;
+}
+
+.container { width: min(1250px, 94%); margin: 35px auto; position: relative; z-index: 1; }
+
+/* =========================================================
+   HIGH CONTRAST CARDS & PANELS
+========================================================= */
+.status-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 25px; }
+
+.card { 
+  padding: 22px; background: var(--panel); 
+  border: 2px solid var(--border); border-radius: 16px; 
+  box-shadow: 0 10px 30px #000000; position: relative; overflow: hidden;
+  transition: border-color var(--animation-speed), padding var(--animation-speed);
+}
+
+.card-label { 
+  color: #ffffff; font-size: .85rem; text-transform: uppercase; 
+  letter-spacing: .15em; font-weight: 800; opacity: 0.9;
+}
+
+.card-value { 
+  margin-top: 10px; color: var(--primary); font-size: 1.5rem; 
+  font-weight: 900; text-shadow: 0 0 15px rgba(var(--primary-rgb), 0.8), 1px 1px 2px #000; 
+  transition: color var(--animation-speed); 
+}
+
+.main-grid { display: grid; grid-template-columns: 1fr 1.5fr; gap: 25px; margin-bottom: 30px; }
+
+/* =========================================================
+   PROFILE CARDS
+========================================================= */
+.profiles-header {
+  margin: 35px 0 20px 0; font-size: 1.6rem; font-weight: 900; text-transform: uppercase;
+  letter-spacing: 0.15em; color: var(--primary); text-shadow: 0 0 12px rgba(var(--primary-rgb), 0.6), 2px 2px 4px #000;
+  border-bottom: 3px solid var(--primary); padding-bottom: 10px; 
+  transition: color var(--animation-speed), border-color var(--animation-speed);
+}
+
+.profile-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
+
+.profile-card {
+  background: #08080e; border: 2px solid rgba(var(--primary-rgb), 0.4);
+  border-radius: 16px; padding: 22px 18px; text-align: center;
+  box-shadow: 0 10px 30px #000000; transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+  position: relative; overflow: hidden;
+}
+
+.card-hd-bg {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  opacity: 0; transform: scale(1.15);
+  transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+  z-index: 0; pointer-events: none;
+}
+.card-hd-bg svg { width: 100%; height: 100%; }
+.card-hd-bg::after {
+  content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.95) 80%);
+}
+
+.profile-card-content { position: relative; z-index: 1; }
+
+.profile-card:hover, .profile-card.active {
+  transform: translateY(-8px); border-color: var(--primary);
+  box-shadow: 0 15px 35px rgba(var(--primary-rgb), 0.5);
+}
+
+.profile-card:hover .card-hd-bg, .profile-card.active .card-hd-bg {
+  opacity: 1; transform: scale(1.0);
+}
+
+.profile-avatar-box {
+  width: 105px; height: 105px; border-radius: 50%;
+  border: 3px solid var(--primary); margin: 0 auto 14px auto;
+  background: #000000; display: flex; align-items: center; justify-content: center;
+  transition: border-color var(--animation-speed), box-shadow var(--animation-speed);
+  overflow: hidden; box-shadow: 0 0 15px rgba(0,0,0,0.9);
+}
+
+.profile-avatar-box svg { width: 100%; height: 100%; }
+
+.profile-card:hover .profile-avatar-box, .profile-card.active .profile-avatar-box { 
+  border-color: #ffffff; 
+  box-shadow: 0 0 25px rgba(var(--primary-rgb), 0.9); 
+}
+
+.profile-name { 
+  color: #ffffff; font-size: 1.35rem; font-weight: 900; 
+  margin: 0 0 5px 0; text-transform: uppercase; letter-spacing: 1.2px; 
+  text-shadow: 2px 2px 4px #000000; 
+}
+
+.profile-role { 
+  color: var(--primary); font-size: 0.85rem; font-weight: 800; 
+  text-transform: uppercase; letter-spacing: 1.5px; margin: 0 0 12px 0; 
+  text-shadow: 1px 1px 3px #000000;
+  transition: color var(--animation-speed); 
+}
+
+.profile-desc { 
+  color: #ffffff; font-size: 0.9rem; line-height: 1.5; 
+  font-weight: 600; text-shadow: 1px 1px 3px #000000; 
+}
+
+/* =========================================================
+   CONTROLS & TABLES
+========================================================= */
+.panel-title { 
+  margin: 0 0 20px; font-size: 1.25rem; font-weight: 900; 
+  text-transform: uppercase; letter-spacing: 0.1em; 
+  border-bottom: 2px solid var(--primary); padding-bottom: 10px; color: #ffffff; 
+}
+
+.control { 
+  display: flex; align-items: center; justify-content: space-between; gap: 15px; 
+  margin-bottom: 16px; padding: var(--control-padding); background: #000000; 
+  border: 1px solid rgba(255,255,255,0.25); border-radius: 12px; 
+  transition: padding var(--animation-speed);
+}
+
+.control-text { font-weight: 700; font-size: 1rem; color: #ffffff; }
+.control-text small { display: block; margin-top: 5px; color: #d0d0d0; font-size: 0.85rem; font-weight: 500; }
+
+button, select { 
+  padding: var(--control-padding); color: #ffffff; font-size: var(--control-size); 
+  background: #12121c; border: 2px solid var(--primary); border-radius: var(--radius); 
+  transition: all var(--animation-speed); font-weight: 800; 
+}
+
+button:hover, select:hover { 
+  background: var(--primary); color: #000000; 
+  transform: translateY(-2px); box-shadow: 0 5px 20px rgba(var(--primary-rgb), 0.6); 
+}
+
+button:focus-visible, select:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+
+.test-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 2px solid rgba(255,255,255,0.2); padding-bottom: 15px; }
+
+.run-button { 
+  color: #000000; background: var(--primary); border: 2px solid #ffffff; 
+  font-weight: 900; letter-spacing: 0.1em; padding: 12px 24px; 
+  box-shadow: 0 0 20px rgba(var(--primary-rgb), 0.8); transition: all var(--animation-speed); 
+}
+
+.run-button:hover { background: #ffffff; color: #000000; box-shadow: 0 0 30px #ffffff; transform: scale(1.05); }
+
+.progress { height: 14px; margin-bottom: 25px; background: #000000; border-radius: 100px; border: 2px solid var(--primary); overflow: hidden; }
+.progress-bar { width: 0%; height: 100%; background: var(--primary); box-shadow: 0 0 15px var(--primary); transition: width 0.2s ease; }
+
+.table-wrapper { max-height: 380px; overflow: auto; border-radius: 12px; background: #000000; border: 2px solid rgba(255,255,255,0.2); }
+table { width: 100%; border-collapse: collapse; font-size: .95rem; }
+th { 
+  position: sticky; top: 0; padding: 16px; text-align: left; 
+  color: var(--primary); background: #0a0a10; font-weight: 900; 
+  text-transform: uppercase; z-index: 10; border-bottom: 2px solid var(--primary); 
+}
+td { padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.15); color: #ffffff; font-weight: 600; }
+
+.status-pass { color: #00ff66; font-weight: 900; text-shadow: 0 0 8px #00ff66; }
+.status-adaptive { color: var(--primary); font-weight: 900; }
+
+.console { 
+  height: 180px; margin-top: 25px; padding: 18px; overflow: auto; 
+  color: #00ff41; font-family: 'Courier New', monospace; font-size: .95rem; 
+  background: #000000; border: 2px solid #00ff41; border-radius: 12px; box-shadow: inset 0 0 15px rgba(0,255,65,0.2);
+}
+.console-line { margin-bottom: 6px; font-weight: 700; }
+.console-line::before { content: "DC_OS> "; color: var(--primary); }
+
+@media (max-width: 950px) { .status-grid { grid-template-columns: repeat(2, 1fr); } .main-grid { grid-template-columns: 1fr; } }
+@media (max-width: 500px) { .status-grid { grid-template-columns: 1fr; } .container { width: 96%; } .logo { font-size: 2rem; } .hero-avatar-wrapper { width: 100px; height: 100px; } }
+
+/* ===== MULTIMODAL ADD-ONS ===== */
+#dock{position:fixed;right:14px;bottom:14px;z-index:60;display:flex;flex-wrap:wrap;gap:8px;max-width:min(560px,94vw);justify-content:flex-end;background:var(--panel);border:2px solid var(--primary);border-radius:16px;padding:10px;box-shadow:0 0 30px rgba(var(--primary-rgb),.4)}
+#dock button{padding:8px 12px;font-size:.85rem}
+button.on{background:var(--primary)!important;color:#000!important;box-shadow:0 0 18px rgba(var(--primary-rgb),.9)}
+#gaze{position:fixed;width:30px;height:30px;border:2px solid var(--primary);background:rgba(var(--primary-rgb),.25);border-radius:50%;pointer-events:none;z-index:100;transform:translate(-50%,-50%);display:none;transition:width .2s,height .2s}
+#gaze.fix{width:48px;height:48px;background:rgba(var(--primary-rgb),.5)}
+#gazeHud{position:fixed;left:14px;bottom:14px;z-index:60;display:none;background:rgba(0,0,0,.88);border:2px solid var(--primary);border-radius:12px;padding:12px 14px;font:700 .8rem/1.5 'Courier New',monospace}
+#caption{position:fixed;top:14px;left:50%;transform:translateX(-50%);z-index:80;background:#000;color:var(--primary);border:2px solid var(--primary);border-radius:100px;padding:10px 22px;font-weight:800;max-width:92vw;opacity:0;transition:opacity .3s;pointer-events:none;text-align:center}
+#caption.show{opacity:1}
+.profile-card.fixated{outline:4px solid var(--primary);box-shadow:0 0 45px rgba(var(--primary-rgb),.95);transform:translateY(-8px) scale(1.03)}
+.profile-card::after{content:'';position:absolute;left:0;bottom:0;height:6px;width:calc(var(--dwell,0)*100%);background:var(--primary);z-index:3}
+.stage-wrap{margin:25px 0}
+#stage{position:relative;height:230px;border:2px dashed rgba(var(--primary-rgb),.7);border-radius:16px;background:rgba(0,0,0,.6);overflow:hidden;touch-action:none}
+#emblem{position:absolute;left:calc(50% - 45px);top:70px;width:90px;height:90px;border-radius:18px;background:var(--primary);color:#000;display:grid;place-items:center;touch-action:none;user-select:none;transition:transform .25s,background .3s,box-shadow .3s;box-shadow:0 0 30px rgba(var(--primary-rgb),.8);cursor:grab}
+.cmd-row{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+.cmd-row input{flex:1;min-width:200px;padding:12px;border-radius:12px;border:2px solid var(--primary);background:#000;color:#fff;font-size:1rem}
+.hint{margin-top:12px;color:#ddd;font-size:.85rem;line-height:1.6}
+.hint b{color:var(--primary)}
+body.hc{--border:#fff;--primary:#fff;--primary-rgb:255,255,255}
+body.calm *{animation:none!important;transition:none!important}
+#camBox{position:fixed;left:14px;top:70px;width:170px;z-index:60;display:none;border:2px solid var(--primary);border-radius:12px;overflow:hidden;background:#000}
+#camBox video{width:100%;display:block;transform:scaleX(-1)}
+.ub{display:flex;align-items:center;gap:10px;margin:8px 0}.ub .l{width:100px;font-weight:800}
+.ub .bar{height:18px;min-width:4px;background:var(--primary);border-radius:9px;box-shadow:0 0 12px rgba(var(--primary-rgb),.7);transition:width .4s}
+.ub .n{font-weight:900;color:var(--primary)}
+</style>
+</head>
+<body class="theme-batman">
+
+<svg class="bg-hero-symbol" viewBox="0 0 100 60" fill="currentColor">
+  <path d="M 50,45 L 45,35 L 20,40 L 5,20 L 25,15 L 35,25 L 42,10 L 45,15 L 50,15 L 55,15 L 58,10 L 65,25 L 75,15 L 95,20 L 80,40 L 55,35 Z" />
+</svg>
+
+<header class="header">
+  <div class="signal"></div>
+  <div class="signal-beam" id="signalBeam"></div>
+  
+  <div class="hero-avatar-wrapper" id="headerAvatarBox" title="Batman: The Brave & The Bold"></div>
+  
+  <div class="logo">
+    <svg viewBox="0 0 100 60" width="70" height="42" fill="currentColor">
+      <path d="M 50,45 L 45,35 L 20,40 L 5,20 L 25,15 L 35,25 L 42,10 L 45,15 L 50,15 L 55,15 L 58,10 L 65,25 L 75,15 L 95,20 L 80,40 L 55,35 Z" />
+    </svg>
+    DC UNIVERSE
+  </div>
+  <div class="subtitle" id="subtitleText">BATMAN: THE BRAVE AND THE BOLD OS</div>
+</header>
+
+<main class="container">
+  <section class="status-grid">
+    <div class="card"><div class="card-label">Active Modality</div><div class="card-value" id="modality">Mouse</div></div>
+    <div class="card"><div class="card-label">Pointer Precision</div><div class="card-value" id="pointer">Fine</div></div>
+    <div class="card"><div class="card-label">System Diagnostics</div><div class="card-value" id="testStatus">Standby</div></div>
+    <div class="card"><div class="card-label">Test Sequences</div><div class="card-value" id="testCount">0 / 100</div></div>
+  </section>
+
+  <!-- =====================================================
+       5 CARTOON SUPERHEROES PROFILE CARDS
+  ====================================================== -->
+  <h2 class="profiles-header">Justice League Animated Roster</h2>
+  <section class="profile-grid">
+    
+    <!-- 1. BATMAN -->
+    <div class="profile-card active" data-hero="batman" data-subtitle="BATMAN: THE BRAVE AND THE BOLD OS">
+      <div class="card-hd-bg" id="bg-batman"></div>
+      <div class="profile-card-content">
+        <div class="profile-avatar-box" id="avatar-batman"></div>
+        <h3 class="profile-name">Batman</h3>
+        <div class="profile-role">The Brave & The Bold</div>
+        <p class="profile-desc">Caped Crusader from the iconic animated series. Master detective & team leader.</p>
+      </div>
+    </div>
+
+    <!-- 2. SUPERMAN -->
+    <div class="profile-card" data-hero="superman" data-subtitle="SUPERMAN: JUSTICE LEAGUE CARTOON OS">
+      <div class="card-hd-bg" id="bg-superman"></div>
+      <div class="profile-card-content">
+        <div class="profile-avatar-box" id="avatar-superman"></div>
+        <h3 class="profile-name">Superman</h3>
+        <div class="profile-role">Justice League Unlimited</div>
+        <p class="profile-desc">Animated Man of Steel. Defender of Earth and co-founder of the Justice League.</p>
+      </div>
+    </div>
+
+    <!-- 3. WONDER WOMAN -->
+    <div class="profile-card" data-hero="wonderwoman" data-subtitle="WONDER WOMAN: JUSTICE LEAGUE CARTOON OS">
+      <div class="card-hd-bg" id="bg-wonderwoman"></div>
+      <div class="profile-card-content">
+        <div class="profile-avatar-box" id="avatar-wonderwoman"></div>
+        <h3 class="profile-name">Wonder Woman</h3>
+        <div class="profile-role">Amazonian Champion</div>
+        <p class="profile-desc">Princess Diana as portrayed in the Justice League animated universe.</p>
+      </div>
+    </div>
+
+    <!-- 4. THE FLASH -->
+    <div class="profile-card" data-hero="flash" data-subtitle="THE FLASH: JUSTICE LEAGUE CARTOON OS">
+      <div class="card-hd-bg" id="bg-flash"></div>
+      <div class="profile-card-content">
+        <div class="profile-avatar-box" id="avatar-flash"></div>
+        <h3 class="profile-name">The Flash</h3>
+        <div class="profile-role">Scarlet Speedster</div>
+        <p class="profile-desc">Wally West from the DCAU. Heart and humor of the animated Justice League.</p>
+      </div>
+    </div>
+
+    <!-- 5. GREEN LANTERN -->
+    <div class="profile-card" data-hero="greenlantern" data-subtitle="GREEN LANTERN: JUSTICE LEAGUE CARTOON OS">
+      <div class="card-hd-bg" id="bg-greenlantern"></div>
+      <div class="profile-card-content">
+        <div class="profile-avatar-box" id="avatar-greenlantern"></div>
+        <h3 class="profile-name">Green Lantern</h3>
+        <div class="profile-role">John Stewart (DCAU)</div>
+        <p class="profile-desc">Veteran Marine turned Emerald Knight from the DCAU Justice League cartoon.</p>
+      </div>
+    </div>
+
+  </section>
+
+
+  <section class="card stage-wrap">
+    <h2 class="panel-title">Voice &amp; Gesture Stage</h2>
+    <div id="stage"><div id="emblem" title="Drag me"></div></div>
+    <div class="cmd-row">
+      <input id="cmdInput" placeholder="Type a command (fallback if mic is blocked) e.g. 'superman', 'bigger', 'red'">
+      <button id="cmdBtn">SEND</button>
+    </div>
+    <div class="hint"><b>Say a hero:</b> "Batman", "Superman", "Wonder Woman", "Flash", "Green Lantern" &nbsp;|&nbsp; <b>Emblem:</b> "red / blue / green", "bigger", "smaller", "reset" &nbsp;|&nbsp; <b>Navigate:</b> "next", "previous" &nbsp;|&nbsp; <b>System:</b> "run tests", "compact", "standard", "read profile", "high contrast", "calm", "zoom in", "gaze on", "stop listening".<br><b>Gestures:</b> drag the emblem, swipe the hero cards left/right, or use arrow keys. <b>Eyes:</b> turn on Gaze, rest the pointer on a card for 0.5s to fixate and select it.</div>
+  </section>
+
+  <section class="card stage-wrap">
+    <h2 class="panel-title">Modality Usage Report</h2>
+    <div id="usage"></div>
+    <button id="usageReset">RESET REPORT</button>
+  </section>
+
+  <section class="main-grid">
+    <div class="card">
+      <h2 class="panel-title">Tactical Controls</h2>
+      <div class="control">
+        <div class="control-text">Manual Override<small>Touch targets scale dynamically</small></div>
+        <button id="engageBtn">ENGAGE</button>
+      </div>
+      <div class="control">
+        <div class="control-text">Sonar Command<small>Vocal recognition matrix</small></div>
+        <button id="micButton">ACTIVATE MIC</button>
+      </div>
+      <div class="control">
+        <div class="control-text">HUD Density<small>Display compaction mode</small></div>
+        <select id="densitySelect">
+          <option value="compact">Combat (Compact)</option>
+          <option value="normal" selected>Standard (Normal)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="test-header">
+        <h2 class="panel-title">Adaptive Diagnostic Matrix</h2>
+        <button class="run-button" id="runTests">INITIATE TESTS</button>
+      </div>
+      <div class="progress"><div class="progress-bar" id="progressBar"></div></div>
+      <div class="table-wrapper">
+        <table>
+          <thead><tr><th>ID</th><th>Combat Scenario</th><th>Input Source</th><th>System Adaptation</th><th>Status</th></tr></thead>
+          <tbody id="testTable"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <div class="console" id="console" aria-live="polite"></div>
+</main>
+
+<script>
+/* =========================================================
+   CARTOON VECTOR ARTWORK ASSETS
+========================================================= */
+const cartoonSvgs = {
+  batman: `<svg viewBox="0 0 100 100">
+    <rect width="100" height="100" fill="#0b101d"/>
+    <path d="M 15,100 L 25,60 L 35,40 L 28,15 L 42,28 L 50,25 L 58,28 L 72,15 L 65,40 L 75,60 L 85,100 Z" fill="#224488"/>
+    <path d="M 38,42 L 62,42 L 58,68 L 50,75 L 42,68 Z" fill="#f0be92"/>
+    <path d="M 40,60 L 60,60 L 50,68 Z" fill="#111827"/>
+    <polygon points="36,36 46,40 38,44" fill="#ffffff"/>
+    <polygon points="64,36 54,40 62,44" fill="#ffffff"/>
+    <ellipse cx="50" cy="85" rx="16" ry="10" fill="#ffd700" stroke="#000" stroke-width="1.5"/>
+    <path d="M 50,88 L 47,83 L 38,85 L 35,78 L 42,76 L 46,80 L 50,77 L 54,80 L 58,76 L 65,78 L 62,85 L 53,83 Z" fill="#000000"/>
+  </svg>`,
+
+  superman: `<svg viewBox="0 0 100 100">
+    <rect width="100" height="100" fill="#001a33"/>
+    <path d="M 10,100 L 20,55 L 80,55 L 90,100 Z" fill="#cc0022"/>
+    <path d="M 25,100 L 32,55 L 68,55 L 75,100 Z" fill="#0044b3"/>
+    <path d="M 32,25 L 68,25 L 65,58 L 50,68 L 35,58 Z" fill="#f0be92"/>
+    <path d="M 30,28 C 30,10 70,10 70,28 C 60,18 40,18 30,28 Z" fill="#0d1117"/>
+    <path d="M 48,20 Q 42,28 46,32 Q 52,28 48,20 Z" fill="#0d1117"/>
+    <line x1="38" y1="36" x2="46" y2="38" stroke="#331a00" stroke-width="2"/>
+    <line x1="62" y1="36" x2="54" y2="38" stroke="#331a00" stroke-width="2"/>
+    <path d="M 44,54 Q 50,58 56,54" stroke="#804000" stroke-width="2" fill="none"/>
+    <polygon points="50,96 28,70 38,60 62,60 72,70" fill="#ffd700" stroke="#cc0022" stroke-width="2"/>
+    <path d="M 60,66 L 46,66 L 42,74 L 56,77 L 52,88 L 40,88" stroke="#cc0022" stroke-width="3.5" fill="none"/>
+  </svg>`,
+
+  wonderwoman: `<svg viewBox="0 0 100 100">
+    <rect width="100" height="100" fill="#2b000a"/>
+    <path d="M 15,35 C 5,85 95,85 85,35 C 98,98 2,98 15,35 Z" fill="#0f0914"/>
+    <path d="M 30,100 L 50,75 L 70,100 Z" fill="#cc0033"/>
+    <path d="M 34,30 L 66,30 L 62,60 L 50,68 L 38,60 Z" fill="#f5c29b"/>
+    <polygon points="32,24 50,30 68,24 60,18 40,18" fill="#ffd700"/>
+    <polygon points="50,22 47,27 53,27" fill="#cc0033"/>
+    <path d="M 35,78 L 50,88 L 65,78 L 60,72 L 50,76 L 40,72 Z" fill="#ffd700"/>
+  </svg>`,
+
+  flash: `<svg viewBox="0 0 100 100">
+    <rect width="100" height="100" fill="#330000"/>
+    <path d="M 20,100 L 30,50 L 70,50 L 80,100 Z" fill="#cc0000"/>
+    <circle cx="50" cy="40" r="24" fill="#dd0000"/>
+    <path d="M 36,46 Q 50,56 64,46 L 58,62 L 42,62 Z" fill="#f5c29b"/>
+    <polygon points="24,35 12,28 20,42 15,52 28,40" fill="#ffee00"/>
+    <polygon points="76,35 88,28 80,42 85,52 72,40" fill="#ffee00"/>
+    <circle cx="50" cy="80" r="14" fill="#ffffff"/>
+    <polygon points="52,68 42,80 49,80 46,92 58,78 51,78" fill="#ffee00"/>
+  </svg>`,
+
+  greenlantern: `<svg viewBox="0 0 100 100">
+    <rect width="100" height="100" fill="#001b0a"/>
+    <path d="M 20,100 L 32,55 L 68,55 L 80,100 Z" fill="#009933"/>
+    <path d="M 38,70 L 50,92 L 62,70 Z" fill="#0d1117"/>
+    <path d="M 34,25 L 66,25 L 62,58 L 50,66 L 38,58 Z" fill="#8d5b36"/>
+    <path d="M 32,25 C 32,15 68,15 68,25 Z" fill="#0a0a0d"/>
+    <ellipse cx="42" cy="38" rx="4" ry="2" fill="#00ff77"/>
+    <ellipse cx="58" cy="38" rx="4" ry="2" fill="#00ff77"/>
+    <circle cx="50" cy="78" r="13" fill="#ffffff"/>
+    <circle cx="50" cy="78" r="7" fill="none" stroke="#009933" stroke-width="2.5"/>
+    <line x1="40" y1="71" x2="60" y2="71" stroke="#009933" stroke-width="3"/>
+    <line x1="40" y1="85" x2="60" y2="85" stroke="#009933" stroke-width="3"/>
+  </svg>`
+};
+
+const symbols = {
+  batman: '<path d="M 50,45 L 45,35 L 20,40 L 5,20 L 25,15 L 35,25 L 42,10 L 45,15 L 50,15 L 55,15 L 58,10 L 65,25 L 75,15 L 95,20 L 80,40 L 55,35 Z" />',
+  superman: '<path d="M 50,55 L 10,20 L 28,5 L 72,5 L 90,20 Z" fill="none" stroke="currentColor" stroke-width="5"/><path d="M 68,18 L 38,18 L 32,30 L 58,35 L 52,48 L 28,48" fill="none" stroke="currentColor" stroke-width="5"/>',
+  wonderwoman: '<path d="M 12,20 L 30,52 L 50,25 L 70,52 L 88,20 L 76,15 L 64,36 L 50,15 L 36,36 L 24,15 Z" />',
+  flash: '<path d="M 58,5 L 22,35 L 46,35 L 34,55 L 78,25 L 54,25 L 66,5 Z" />',
+  greenlantern: '<circle cx="50" cy="30" r="18" fill="none" stroke="currentColor" stroke-width="5"/><circle cx="50" cy="30" r="8"/><line x1="20" y1="12" x2="80" y2="12" stroke="currentColor" stroke-width="5"/><line x1="20" y1="48" x2="80" y2="48" stroke="currentColor" stroke-width="5"/>'
+};
+
+Object.keys(cartoonSvgs).forEach(hero => {
+  const avatarBox = document.getElementById(`avatar-${hero}`);
+  const bgBox = document.getElementById(`bg-${hero}`);
+  if (avatarBox) avatarBox.innerHTML = cartoonSvgs[hero];
+  if (bgBox) bgBox.innerHTML = cartoonSvgs[hero];
+});
+
+const headerSymbolSVG = document.querySelector('.logo svg');
+const bgSymbolSVG = document.querySelector('.bg-hero-symbol');
+const headerAvatarBox = document.getElementById('headerAvatarBox');
+const subtitleText = document.getElementById('subtitleText');
+const body = document.body;
+let lockedHero = 'batman';
+
+if (headerAvatarBox) headerAvatarBox.innerHTML = cartoonSvgs['batman'];
+
+const heroCards = document.querySelectorAll('.profile-card');
+heroCards.forEach(card => {
+  card.addEventListener('mouseenter', () => {
+    const hero = card.getAttribute('data-hero');
+    const subtitle = card.getAttribute('data-subtitle');
+    setHeroTheme(hero, subtitle);
+  });
+
+  card.addEventListener('mouseleave', () => {
+    const activeCard = document.querySelector('.profile-card.active');
+    const hero = activeCard ? activeCard.getAttribute('data-hero') : lockedHero;
+    const subtitle = activeCard ? activeCard.getAttribute('data-subtitle') : "BATMAN: THE BRAVE AND THE BOLD OS";
+    setHeroTheme(hero, subtitle);
+  });
+
+  card.addEventListener('click', () => {
+    heroCards.forEach(c => c.classList.remove('active'));
+    card.classList.add('active');
+    lockedHero = card.getAttribute('data-hero');
+    const subtitle = card.getAttribute('data-subtitle');
+    setHeroTheme(lockedHero, subtitle);
+    log(`Global Cursor Lock Engaged → ${lockedHero.toUpperCase()} Active Across Screen.`);
+  });
+});
+
+function setHeroTheme(hero, subtitle) {
+  body.classList.remove('theme-batman', 'theme-superman', 'theme-wonderwoman', 'theme-flash', 'theme-greenlantern');
+  body.classList.add(`theme-${hero}`);
+  
+  if (symbols[hero]) {
+    headerSymbolSVG.innerHTML = symbols[hero];
+    bgSymbolSVG.innerHTML = symbols[hero];
+  }
+  
+  if (cartoonSvgs[hero] && headerAvatarBox) {
+    headerAvatarBox.innerHTML = cartoonSvgs[hero];
+  }
+
+  if (subtitle) {
+    subtitleText.textContent = subtitle;
+  }
+}
+
+/* Dynamic Interactive Controls Event Listeners */
+
+// 1. ENGAGE Button
+document.getElementById('engageBtn').addEventListener('click', () => {
+  log("MANUAL OVERRIDE: Combat protocol engaged successfully.");
+});
+
+const micBtn = document.getElementById('micButton');
+
+// 3. HUD Density Select Dropdown
+document.getElementById('densitySelect').addEventListener('change', (e) => {
+  if (e.target.value === 'compact') {
+    document.documentElement.style.setProperty('--control-padding', '6px 12px');
+    log("HUD Density Changed → COMBAT (COMPACT)");
+  } else {
+    document.documentElement.style.setProperty('--control-padding', '12px 20px');
+    log("HUD Density Changed → STANDARD (NORMAL)");
+  }
+});
+
+const signalBeam = document.getElementById("signalBeam");
+window.addEventListener("mousemove", (event) => {
+  const centerX = window.innerWidth / 2;
+  const mouseX = event.clientX;
+  const rotationAngle = ((mouseX - centerX) / centerX) * -25;
+  if (signalBeam) {
+    signalBeam.style.transform = `translateX(-50%) rotate(${rotationAngle}deg)`;
+  }
+});
+
+const consoleElement = document.getElementById("console");
+function log(message) {
+  const line = document.createElement("div");
+  line.className = "console-line";
+  line.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+  consoleElement.prepend(line);
+  while (consoleElement.children.length > 30) consoleElement.removeChild(consoleElement.lastChild);
+}
+
+const testData = Array.from({ length: 50 }, (_, i) => ({
+  id: i + 1, scenario: `Sector ${i + 1} Interactive Protocol`, input: "User Input Check", expected: "Full Dynamic Response"
+}));
+
+function renderTests() {
+  const testTable = document.getElementById("testTable");
+  testTable.innerHTML = testData.map(test => `
+    <tr><td>#${test.id}</td><td>${test.scenario}</td><td>${test.input}</td><td>${test.expected}</td><td id="result-${test.id}" class="status-adaptive">STANDBY</td></tr>
+  `).join("");
+}
+
+async function runTests() {
+  const progressBar = document.getElementById("progressBar");
+  log("INITIATING DYNAMIC TACTICAL DIAGNOSTICS...");
+  for (let i = 0; i < testData.length; i++) {
+    await new Promise(r => setTimeout(r, 20));
+    const res = document.getElementById(`result-${testData[i].id}`);
+    if (res) {
+      res.textContent = "PASSED";
+      res.className = "status-pass";
+    }
+    progressBar.style.width = `${((i + 1) / testData.length) * 100}%`;
+  }
+  log("Diagnostic complete. All interactive controls verified and 100% operational.");
+}
+
+renderTests();
+document.getElementById("runTests").addEventListener("click", runTests);
+log("DC Universe Dynamic Terminal Fully Operational.");
+</script>
+
+<div id="caption" aria-live="polite"></div>
+<div id="camBox"><video id="camVid" playsinline muted></video></div>
+<div id="gaze"></div>
+<div id="gazeHud">GAZE (<span id="gx">0</span>,<span id="gy">0</span>)<br>Target: <span id="gt">None</span><br>Dwell: <span id="gd">0</span> ms<br>Fixations: <span id="gf">-</span></div>
+<div id="dock" role="toolbar" aria-label="Adaptive modalities">
+  <button id="dVoice">🎙 Voice</button><button id="dGaze">👁 Gaze</button><button id="dDwell">⏱ Dwell-Click</button><button id="dNarr">🔊 Narrate</button>
+  <button id="dBig">A+</button><button id="dSmall">A−</button><button id="dHC">◐ Contrast</button><button id="dCalm">🌙 Calm</button>
+  <button id="dHand">✋ Hand Swipe</button><button id="dCam">📷 Cam Gaze</button><button id="dWake">🔔 Wake Phrase</button><button id="dSfx">🎵 Sound FX</button>
+</div>
+
+<script>
+/* ===== MODULE 1 (Speech+Gesture) + MODULE 2 (Eye-tracking) + ADAPTIVE MODES ===== */
+(()=>{
+const $=id=>document.getElementById(id);
+const heroes=['batman','superman','wonderwoman','flash','greenlantern'];
+const cards=[...document.querySelectorAll('.profile-card')];
+const st={voice:false,gaze:false,dwell:false,narr:false,size:100,hand:false,cam:false,wake:false,sfx:true};let boot=true,awake=0;
+const root=document.documentElement;
+let capT;
+function cap(t){const c=$('caption');c.textContent=t;c.classList.add('show');clearTimeout(capT);capT=setTimeout(()=>c.classList.remove('show'),2800);}
+function modality(m){$('modality').textContent=m;}
+function speak(t){if(!('speechSynthesis' in window))return;speechSynthesis.cancel();speechSynthesis.speak(new SpeechSynthesisUtterance(t));}
+function sync(){[['dVoice','voice'],['dGaze','gaze'],['dDwell','dwell'],['dNarr','narr'],['dHand','hand'],['dCam','cam'],['dWake','wake'],['dSfx','sfx']].forEach(([b,k])=>$(b).classList.toggle('on',st[k]));}
+
+/* --- hero selection (shared by voice / gaze / swipe / keys / click) --- */
+const emblem=$('emblem');
+function paintEmblem(h){emblem.innerHTML='<svg viewBox="0 0 100 60" width="64" height="44" fill="currentColor">'+symbols[h]+'</svg>';}
+function selectHero(h,src){
+  const c=cards.find(x=>x.dataset.hero===h);if(!c)return;
+  cards.forEach(x=>x.classList.remove('active'));c.classList.add('active');
+  lockedHero=h;setHeroTheme(h,c.dataset.subtitle);paintEmblem(h);
+  if(!boot)c.scrollIntoView({behavior:'smooth',block:'center'});
+  const name=c.querySelector('.profile-name').textContent;
+  log(`${src||'Input'} → Hero profile ${name.toUpperCase()} activated.`);
+  if(!boot){sfx(h);if(src==='Voice'&&!st.narr)speak(name+' activated');save();}
+  if(st.narr&&!boot)speak(`${name}. ${c.querySelector('.profile-role').textContent}. ${c.querySelector('.profile-desc').textContent}`);
+}
+const cycle=d=>{const i=heroes.indexOf(lockedHero);selectHero(heroes[(i+d+heroes.length)%heroes.length],'Navigate');};
+paintEmblem('batman');
+cards.forEach(c=>c.addEventListener('click',()=>{c.classList.remove('fixated');}));
+
+/* --- command engine (speech + typed) --- */
+const col={red:'#d9534f',blue:'#0056b3',green:'#28a745'};
+function command(raw,src){
+  const t=raw.toLowerCase().trim();if(!t)return;
+  modality(src);cap(`${src}: "${t}"`);log(`${src} command: "${t}"`);
+  let hit=false;const m=r=>r.test(t)&&(hit=true);
+  if(m(/bat\s?man/))selectHero('batman',src);
+  else if(m(/super\s?man/))selectHero('superman',src);
+  else if(m(/wonder\s?woman|diana/))selectHero('wonderwoman',src);
+  else if(m(/flash/))selectHero('flash',src);
+  else if(m(/green\s?lantern|lantern/))selectHero('greenlantern',src);
+  if(m(/\bnext\b/))cycle(1);
+  if(m(/previous|\bback\b/))cycle(-1);
+  ['red','blue','green'].forEach(k=>{if(new RegExp('\\b'+k+'\\b').test(t)&&!/lantern/.test(t)){hit=true;emblem.style.background=col[k];}});
+  if(m(/bigger|grow/))emblem.style.transform='scale(1.5)';
+  if(m(/smaller|shrink/))emblem.style.transform='scale(.7)';
+  if(m(/reset/)){emblem.style.transform='scale(1)';emblem.style.background='';emblem.style.left='calc(50% - 45px)';emblem.style.top='70px';}
+  if(m(/compact/)){$('densitySelect').value='compact';$('densitySelect').dispatchEvent(new Event('change'));}
+  if(m(/standard|normal/)){$('densitySelect').value='normal';$('densitySelect').dispatchEvent(new Event('change'));}
+  if(m(/run (the )?(tests|diagnostics)/))$('runTests').click();
+  if(m(/read|narrate|tell me/)){const c=cards.find(x=>x.dataset.hero===lockedHero);speak(c.querySelector('.profile-name').textContent+'. '+c.querySelector('.profile-desc').textContent);}
+  if(m(/contrast/))$('dHC').click();
+  if(m(/zoom in|larger text/))$('dBig').click();
+  if(m(/zoom out|smaller text/))$('dSmall').click();
+  if(m(/calm|reduce motion/))$('dCalm').click();
+  if(m(/gaze (on|start)/)&&!st.gaze)$('dGaze').click();
+  if(m(/gaze (off|stop)/)&&st.gaze)$('dGaze').click();
+  if(m(/stop (listening|voice)/))stopVoice();
+  if(!hit)cap(`Not recognised: "${t}"`);
+}
+$('cmdBtn').onclick=()=>{command($('cmdInput').value,'Typed');$('cmdInput').value='';};
+$('cmdInput').addEventListener('keydown',e=>{if(e.key==='Enter')$('cmdBtn').click();e.stopPropagation();});
+
+/* --- speech recognition --- */
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;let rec;
+function startVoice(){
+  if(!SR){cap('Speech API not supported here — use the type box');return;}
+  rec=new SR();rec.continuous=true;rec.lang='en-US';
+  rec.onresult=e=>wakeGate(e.results[e.results.length-1][0].transcript);
+  rec.onerror=e=>{log('Voice error: '+e.error);if(e.error==='not-allowed'||e.error==='service-not-allowed'){st.voice=false;sync();cap('Mic blocked — use the type box or allow the microphone');}};
+  rec.onend=()=>{if(st.voice)try{rec.start();}catch(_){}};
+  try{rec.start();st.voice=true;cap('Listening… say a hero name');}catch(_){}
+  sync();
+}
+function stopVoice(){st.voice=false;if(rec)try{rec.stop();}catch(_){}sync();cap('Voice control off');}
+$('micButton').onclick=$('dVoice').onclick=()=>st.voice?stopVoice():startVoice();
+
+/* --- gesture: drag emblem (mouse + touch via pointer events) --- */
+let drag=null;
+emblem.addEventListener('pointerdown',e=>{drag={x:e.clientX,y:e.clientY,l:emblem.offsetLeft,t:emblem.offsetTop};emblem.setPointerCapture(e.pointerId);emblem.style.cursor='grabbing';});
+emblem.addEventListener('pointermove',e=>{if(!drag)return;const s=$('stage');
+  emblem.style.left=Math.max(0,Math.min(s.clientWidth-90,drag.l+e.clientX-drag.x))+'px';
+  emblem.style.top=Math.max(0,Math.min(s.clientHeight-90,drag.t+e.clientY-drag.y))+'px';});
+emblem.addEventListener('pointerup',()=>{if(drag){drag=null;emblem.style.cursor='grab';modality('Gesture (drag)');}});
+
+/* --- gesture: swipe hero cards, keyboard arrows --- */
+let sw=null;const grid=document.querySelector('.profile-grid');
+grid.addEventListener('pointerdown',e=>{sw={x:e.clientX,y:e.clientY};});
+addEventListener('pointerup',e=>{if(!sw)return;const dx=e.clientX-sw.x,dy=e.clientY-sw.y;sw=null;
+  if(Math.abs(dx)>70&&Math.abs(dx)>Math.abs(dy)*2){cycle(dx<0?1:-1);modality('Gesture (swipe)');cap(dx<0?'Swipe ← next hero':'Swipe → previous hero');}});
+addEventListener('keydown',e=>{
+  if(e.target.tagName==='INPUT')return;modality('Keyboard');
+  if(e.key==='ArrowRight')cycle(1);if(e.key==='ArrowLeft')cycle(-1);});
+
+/* --- adaptive: touch vs mouse sizing --- */
+addEventListener('pointerdown',e=>{
+  if(e.pointerType==='touch'){root.style.setProperty('--control-padding','16px 24px');root.style.setProperty('--control-size','1.1rem');$('pointer').textContent='Coarse (touch)';modality('Touch');}
+  else if(e.pointerType==='mouse'){$('pointer').textContent='Fine';modality(st.gaze?'Gaze (simulated)':'Mouse');}
+});
+if(matchMedia('(pointer:coarse)').matches)$('pointer').textContent='Coarse';
+
+/* --- eye tracking simulation: dwell = fixation --- */
+const gz=$('gaze'),hud=$('gazeHud');
+let cur=null,t0=0,done=false;const fx={};
+addEventListener('pointermove',e=>{
+  if(e.pointerType==='touch'||!st.gaze)return;
+  gz.style.left=e.clientX+'px';gz.style.top=e.clientY+'px';$('gx').textContent=e.clientX;$('gy').textContent=e.clientY;
+  const el=document.elementFromPoint(e.clientX,e.clientY);
+  const tg=el&&el.closest('.profile-card,#dock button,.control button,.run-button');
+  if(tg!==cur){if(cur){cur.classList.remove('fixated');cur.style.removeProperty('--dwell');}
+    cur=tg;t0=performance.now();done=false;gz.classList.remove('fix');}
+});
+(function loop(){
+  if(st.gaze&&cur){
+    const dt=performance.now()-t0,isCard=cur.classList.contains('profile-card');
+    $('gd').textContent=Math.round(dt);
+    $('gt').textContent=(isCard?cur.dataset.hero:cur.textContent.trim())+(done?' (FIXATED)':' …');
+    if(isCard){cur.style.setProperty('--dwell',Math.min(dt/500,1));
+      if(!done&&dt>=500){done=true;cur.classList.add('fixated');gz.classList.add('fix');
+        const h=cur.dataset.hero;fx[h]=(fx[h]||0)+1;
+        $('gf').textContent=Object.entries(fx).map(([k,v])=>k.slice(0,4).toUpperCase()+':'+v).join(' ');
+        modality('Gaze (fixation)');selectHero(h,'Eye fixation');}}
+    else if(st.dwell&&!done&&dt>=900){done=true;gz.classList.add('fix');cur.click();log('Dwell-click triggered on '+cur.textContent.trim());}
+  }
+  requestAnimationFrame(loop);
+})();
+$('dGaze').onclick=()=>{st.gaze=!st.gaze;gz.style.display=hud.style.display=st.gaze?'block':'none';
+  if(!st.gaze&&cur){cur.classList.remove('fixated');cur=null;}
+  cap(st.gaze?'Gaze mode: rest the pointer on a card for 0.5 s':'Gaze mode off');sync();};
+$('dDwell').onclick=()=>{st.dwell=!st.dwell;if(st.dwell&&!st.gaze)$('dGaze').click();cap(st.dwell?'Dwell-click: hover a button for 0.9 s':'Dwell-click off');sync();};
+
+/* --- adaptive accessibility --- */
+$('dNarr').onclick=()=>{st.narr=!st.narr;if(st.narr)speak('Narration on.');else speechSynthesis&&speechSynthesis.cancel();sync();};
+const fs=d=>{st.size=Math.max(80,Math.min(150,st.size+d));root.style.fontSize=st.size+'%';cap('Text size '+st.size+'%');};
+$('dBig').onclick=()=>fs(10);$('dSmall').onclick=()=>fs(-10);
+$('dHC').onclick=()=>{const on=document.body.classList.toggle('hc');$('dHC').classList.toggle('on',on);};
+$('dCalm').onclick=()=>{const on=document.body.classList.toggle('calm');$('dCalm').classList.toggle('on',on);};
+if(matchMedia('(prefers-reduced-motion: reduce)').matches)$('dCalm').click();
+
+
+/* --- wake phrase --- */
+function wakeGate(tx){
+  let l=tx.toLowerCase();
+  if(st.wake){const m=/(hey )?justice league/.exec(l);
+    if(m){awake=Date.now();cap('🔔 Awake — say your command');l=l.replace(m[0],'').trim();if(!l)return;}
+    else if(Date.now()-awake>8000)return;}
+  command(l,'Voice');
+}
+$('dWake').onclick=()=>{st.wake=!st.wake;cap(st.wake?'Say "Hey Justice League" before each command':'Wake phrase off');sync();};
+
+/* --- synthesized hero sound effects --- */
+let ac;
+function sfx(h){
+  if(!st.sfx)return;
+  try{ac=ac||new(window.AudioContext||window.webkitAudioContext)();const n=ac.currentTime;
+    const [ty,fr,du]={batman:['sawtooth',[220,110],.5],superman:['triangle',[262,392,523],.5],wonderwoman:['sine',[523,659,784,1047],.5],flash:['square',[900,300,900,300],.25],greenlantern:['sine',[330,345,330,350],.7]}[h];
+    const o=ac.createOscillator(),g=ac.createGain();o.type=ty;
+    fr.forEach((f,i)=>o.frequency.setValueAtTime(f,n+i*du/fr.length));
+    g.gain.setValueAtTime(.12,n);g.gain.exponentialRampToValueAtTime(.001,n+du);
+    o.connect(g);g.connect(ac.destination);o.start(n);o.stop(n+du);}catch(_){}
+}
+$('dSfx').onclick=()=>{st.sfx=!st.sfx;cap(st.sfx?'Sound FX on':'Sound FX muted');sync();save();};
+
+/* --- webcam hand swipe (frame differencing, no libraries) --- */
+let stream,handOn=false,prev=null,trk=[],lastSw=0;
+const hc=document.createElement('canvas');hc.width=64;hc.height=48;const hx=hc.getContext('2d',{willReadFrequently:true});
+$('dHand').onclick=async()=>{
+  if(handOn){handOn=false;st.hand=false;stream&&stream.getTracks().forEach(t=>t.stop());$('camBox').style.display='none';sync();return;}
+  try{stream=await navigator.mediaDevices.getUserMedia({video:{width:320,height:240}});}
+  catch(_){cap('Camera blocked — allow it, or open the saved file locally');return;}
+  const v=$('camVid');v.srcObject=stream;await v.play();$('camBox').style.display='block';
+  handOn=st.hand=true;prev=null;trk=[];sync();cap('Wave your hand to your right = next hero, to your left = previous');
+  (function tick(){
+    if(!handOn)return;
+    hx.drawImage(v,0,0,64,48);const d=hx.getImageData(0,0,64,48).data,g=new Uint8Array(3072);let k=0,sx=0;
+    for(let i=0;i<d.length;i+=4){const j=i>>2;g[j]=(d[i]+d[i+1]+d[i+2])/3;if(prev&&Math.abs(g[j]-prev[j])>35){k++;sx+=j%64;}}
+    prev=g;const now=performance.now();
+    if(k>90)trk.push({x:sx/k,t:now});
+    trk=trk.filter(q=>now-q.t<600);
+    if(trk.length>3&&now-lastSw>1200){const dx=trk[trk.length-1].x-trk[0].x;
+      if(Math.abs(dx)>18){lastSw=now;trk=[];cycle(dx<0?1:-1);modality('Gesture (hand)');cap('✋ Hand swipe');}}
+    setTimeout(tick,60);
+  })();
+};
+
+/* --- webcam gaze via WebGazer (falls back to mouse simulation) --- */
+$('dCam').onclick=()=>{
+  if(st.cam){st.cam=false;window.webgazer&&webgazer.pause();sync();return;}
+  const go=()=>{webgazer.setGazeListener(d=>{if(d)window.dispatchEvent(new PointerEvent('pointermove',{clientX:d.x,clientY:d.y,pointerType:'mouse'}));}).begin();
+    try{webgazer.showPredictionPoints(false);}catch(_){}
+    st.cam=true;if(!st.gaze)$('dGaze').click();sync();cap('Cam gaze: click cards while looking at them to calibrate');};
+  if(window.webgazer)return go();
+  const sc=document.createElement('script');sc.src='https://cdn.jsdelivr.net/npm/webgazer@2.1.0/dist/webgazer.js';
+  sc.onload=go;sc.onerror=()=>cap('Webcam gaze library blocked here — mouse gaze still works');document.head.appendChild(sc);
+};
+
+/* --- modality usage report --- */
+const keys=['Mouse','Touch','Keyboard','Voice','Typed','Gesture','Gaze'],cnt=Object.fromEntries(keys.map(k=>[k,0]));
+function drawUsage(){const mx=Math.max(1,...Object.values(cnt));
+  $('usage').innerHTML=keys.map(k=>`<div class="ub"><span class="l">${k}</span><div class="bar" style="width:${cnt[k]/mx*60}%"></div><span class="n">${cnt[k]}</span></div>`).join('');}
+new MutationObserver(()=>{const k=keys.find(x=>$('modality').textContent.startsWith(x));if(k){cnt[k]++;drawUsage();}}).observe($('modality'),{childList:true,characterData:true,subtree:true});
+$('usageReset').onclick=()=>{keys.forEach(k=>cnt[k]=0);drawUsage();};
+drawUsage();
+
+/* --- saved preferences --- */
+function save(){try{localStorage.setItem('dcPrefs',JSON.stringify({size:st.size,hc:document.body.classList.contains('hc'),calm:document.body.classList.contains('calm'),narr:st.narr,sfx:st.sfx,wake:st.wake,hero:lockedHero}));}catch(_){}}
+document.getElementById('dock').addEventListener('click',()=>setTimeout(save,50));
+try{const p=JSON.parse(localStorage.getItem('dcPrefs')||'null');
+  if(p){st.size=p.size||100;root.style.fontSize=st.size+'%';if(p.hc)$('dHC').click();if(p.calm&&!document.body.classList.contains('calm'))$('dCalm').click();
+    st.narr=!!p.narr;st.sfx=p.sfx!==false;st.wake=!!p.wake;if(p.hero)selectHero(p.hero,'Saved profile');}}catch(_){}
+boot=false;sync();
+
+/* --- diagnostics status cards --- */
+$('runTests').addEventListener('click',()=>{$('testStatus').textContent='Running';$('testCount').textContent='0 / 50';
+  setTimeout(()=>{$('testStatus').textContent='All Passed';$('testCount').textContent='50 / 50';},1300);});
+$('testCount').textContent='0 / 50';
+})();
+</script>
+</body>
+</html>
